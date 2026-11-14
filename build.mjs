@@ -9,11 +9,14 @@
  * stdio.
  */
 import { spawnSync } from 'node:child_process'
-import { globSync } from 'node:fs'
+import { existsSync, globSync } from 'node:fs'
 
 const id = '@local/mermaid-markdown'
 
-const exe = globSync('node_modules/.pnpm/@esbuild+win32-x64*/node_modules/@esbuild/win32-x64/esbuild.exe')[0]
+const exe = [
+  'node_modules/@esbuild/win32-x64/esbuild.exe',
+  ...globSync('node_modules/.pnpm/@esbuild+win32-x64*/node_modules/@esbuild/win32-x64/esbuild.exe'),
+].find((p) => existsSync(p))
 if (!exe) throw new Error('esbuild native binary not found')
 
 const args = [
