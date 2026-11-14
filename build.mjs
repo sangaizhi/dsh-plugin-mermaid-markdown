@@ -27,6 +27,7 @@ const args = [
   '--target=es2020',
   '--external:react',
   '--external:react/jsx-runtime',
+  '--external:react-dom',
   '--external:@deepseek-ai/dsh-client-ui-primitives',
   '--jsx=automatic',
   '--outfile=client.js',

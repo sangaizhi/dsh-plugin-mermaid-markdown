@@ -186913,7 +186913,7 @@ __export(entry_exports, {
 module.exports = __toCommonJS(entry_exports);
 
 // src/document.jsx
-var import_react2 = require("react");
+var import_react3 = require("react");
 var import_dsh_client_ui_primitives = require("@deepseek-ai/dsh-client-ui-primitives");
 
 // node_modules/markdown-it/lib/common/utils.mjs
@@ -192362,7 +192362,7 @@ function splitMarkdownSegments(body) {
 }
 
 // src/MermaidDiagram.jsx
-var import_react = require("react");
+var import_react2 = require("react");
 
 // node_modules/mermaid/dist/mermaid.core.mjs
 init_chunk_CLGD4ZFX();
@@ -194256,15 +194256,75 @@ function setColorScheme(value2) {
   for (const listener of listeners) listener();
 }
 
-// src/MermaidDiagram.jsx
+// src/MermaidZoomOverlay.jsx
+var import_react = require("react");
+var import_react_dom = require("react-dom");
 var import_jsx_runtime = require("react/jsx-runtime");
+var MIN_ZOOM = 0.5;
+var MAX_ZOOM = 3;
+var STEP = 0.25;
+function clampZoom(value2) {
+  return Math.min(MAX_ZOOM, Math.max(MIN_ZOOM, Number(value2.toFixed(2))));
+}
+function MermaidZoomOverlay({ svg: svg3, onClose }) {
+  const [zoom3, setZoom] = (0, import_react.useState)(1);
+  const closeRef = (0, import_react.useRef)(null);
+  (0, import_react.useEffect)(() => {
+    const onKey = (event3) => {
+      if (event3.key === "Escape") {
+        onClose();
+        return;
+      }
+      if (event3.key === "+" || event3.key === "=") setZoom((z2) => clampZoom(z2 + STEP));
+      else if (event3.key === "-" || event3.key === "_") setZoom((z2) => clampZoom(z2 - STEP));
+      else if (event3.key === "0") setZoom(1);
+    };
+    window.addEventListener("keydown", onKey);
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    closeRef.current?.focus();
+    return () => {
+      window.removeEventListener("keydown", onKey);
+      document.body.style.overflow = previousOverflow;
+    };
+  }, [onClose]);
+  return (0, import_react_dom.createPortal)(
+    /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(
+      "div",
+      {
+        className: "mmd-zoom-backdrop",
+        onClick: (event3) => {
+          if (event3.target === event3.currentTarget) onClose();
+        },
+        children: [
+          /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "mmd-zoom-stage", role: "dialog", "aria-modal": "true", "aria-label": "Mermaid diagram preview", children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "mmd-zoom-canvas", style: { zoom: zoom3 }, dangerouslySetInnerHTML: { __html: svg3 } }) }),
+          /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { className: "mmd-zoom-toolbar", children: [
+            /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", { type: "button", onClick: () => setZoom((z2) => clampZoom(z2 - STEP)), disabled: zoom3 <= MIN_ZOOM, "aria-label": "Zoom out", children: "\u2212" }),
+            /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", { className: "mmd-zoom-readout", "aria-live": "polite", children: [
+              Math.round(zoom3 * 100),
+              "%"
+            ] }),
+            /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", { type: "button", onClick: () => setZoom((z2) => clampZoom(z2 + STEP)), disabled: zoom3 >= MAX_ZOOM, "aria-label": "Zoom in", children: "+" }),
+            /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", { type: "button", onClick: () => setZoom(1), disabled: zoom3 === 1, children: "\u91CD\u7F6E" }),
+            /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", { ref: closeRef, type: "button", onClick: onClose, "aria-label": "Close preview", children: "\u2715" })
+          ] })
+        ]
+      }
+    ),
+    document.body
+  );
+}
+
+// src/MermaidDiagram.jsx
+var import_jsx_runtime2 = require("react/jsx-runtime");
 var idCounter2 = 0;
 function MermaidDiagram({ code: code2 }) {
-  const colorScheme2 = (0, import_react.useSyncExternalStore)(subscribeColorScheme, getColorScheme);
-  const [svg3, setSvg] = (0, import_react.useState)("");
-  const [error3, setError] = (0, import_react.useState)("");
-  const [id39] = (0, import_react.useState)(() => `mmd-${++idCounter2}`);
-  (0, import_react.useEffect)(() => {
+  const colorScheme2 = (0, import_react2.useSyncExternalStore)(subscribeColorScheme, getColorScheme);
+  const [svg3, setSvg] = (0, import_react2.useState)("");
+  const [error3, setError] = (0, import_react2.useState)("");
+  const [expanded, setExpanded] = (0, import_react2.useState)(false);
+  const [id39] = (0, import_react2.useState)(() => `mmd-${++idCounter2}`);
+  (0, import_react2.useEffect)(() => {
     let alive = true;
     setSvg("");
     setError("");
@@ -194282,17 +194342,37 @@ function MermaidDiagram({ code: code2 }) {
     };
   }, [id39, code2, colorScheme2]);
   if (error3) {
-    return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { className: "mmd-diagram", children: [
-      /* @__PURE__ */ (0, import_jsx_runtime.jsx)("pre", { children: code2 }),
-      /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "mmd-error", role: "alert", children: error3 })
+    return /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("div", { className: "mmd-diagram", children: [
+      /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("pre", { children: code2 }),
+      /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("div", { className: "mmd-error", role: "alert", children: error3 })
     ] });
   }
-  if (!svg3) return /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "mmd-diagram", "aria-label": "rendering", children: "rendering\u2026" });
-  return /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "mmd-diagram", dangerouslySetInnerHTML: { __html: svg3 } });
+  if (!svg3) return /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("div", { className: "mmd-diagram", "aria-label": "rendering", children: "rendering\u2026" });
+  return /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)(import_jsx_runtime2.Fragment, { children: [
+    /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(
+      "div",
+      {
+        className: "mmd-diagram",
+        role: "button",
+        tabIndex: 0,
+        title: "\u70B9\u51FB\u653E\u5927\u9884\u89C8",
+        "aria-label": "Mermaid diagram, click to enlarge",
+        onClick: () => setExpanded(true),
+        onKeyDown: (event3) => {
+          if (event3.key === "Enter" || event3.key === " ") {
+            event3.preventDefault();
+            setExpanded(true);
+          }
+        },
+        dangerouslySetInnerHTML: { __html: svg3 }
+      }
+    ),
+    expanded ? /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(MermaidZoomOverlay, { svg: svg3, onClose: () => setExpanded(false) }) : null
+  ] });
 }
 
 // src/document.jsx
-var import_jsx_runtime2 = require("react/jsx-runtime");
+var import_jsx_runtime3 = require("react/jsx-runtime");
 var LABELS = {
   code: {
     copyLabel: "Copy",
@@ -194304,13 +194384,13 @@ var LABELS = {
 var PATH_IMAGES = { resolve: () => void 0 };
 function MermaidMarkdownDocument({ content }) {
   const text6 = content && content.kind === "text" ? content.text : "";
-  const split = (0, import_react2.useMemo)(() => splitFrontmatter(text6), [text6]);
-  const segments = (0, import_react2.useMemo)(() => splitMarkdownSegments(split.body), [split.body]);
+  const split = (0, import_react3.useMemo)(() => splitFrontmatter(text6), [text6]);
+  const segments = (0, import_react3.useMemo)(() => splitMarkdownSegments(split.body), [split.body]);
   if (!content || content.kind !== "text") return null;
   const streaming = !content.eof;
-  return /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("div", { className: "mmd-document", "data-document-markdown": true, children: [
-    split.frontmatter != null ? /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("pre", { className: "mmd-frontmatter", "data-document-frontmatter": true, children: split.frontmatter }) : null,
-    segments.map((seg, i) => seg.kind === "mermaid" ? /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(MermaidDiagram, { code: seg.code }, `m${i}`) : /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(import_dsh_client_ui_primitives.MarkdownText, { text: seg.markdown, streaming, labels: LABELS, pathImages: PATH_IMAGES }, `h${i}`))
+  return /* @__PURE__ */ (0, import_jsx_runtime3.jsxs)("div", { className: "mmd-document", "data-document-markdown": true, children: [
+    split.frontmatter != null ? /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("pre", { className: "mmd-frontmatter", "data-document-frontmatter": true, children: split.frontmatter }) : null,
+    segments.map((seg, i) => seg.kind === "mermaid" ? /* @__PURE__ */ (0, import_jsx_runtime3.jsx)(MermaidDiagram, { code: seg.code }, `m${i}`) : /* @__PURE__ */ (0, import_jsx_runtime3.jsx)(import_dsh_client_ui_primitives.MarkdownText, { text: seg.markdown, streaming, labels: LABELS, pathImages: PATH_IMAGES }, `h${i}`))
   ] });
 }
 
@@ -194337,9 +194417,63 @@ var CSS2 = `
   overflow-wrap: anywhere;
 }
 .mmd-frontmatter:empty { display: none; }
-.mmd-diagram { margin: 0.75em 0; }
+.mmd-diagram { margin: 0.75em 0; cursor: zoom-in; }
 .mmd-diagram > svg { display: block; max-width: 100%; height: auto; }
 .mmd-document .mmd-error { color: var(--dsw-alias-state-error-primary, #d14); white-space: pre-wrap; }
+.mmd-zoom-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  padding: 56px 32px 96px;
+  background: rgba(0, 0, 0, 0.55);
+}
+.mmd-zoom-stage {
+  max-width: 100%;
+  max-height: 100%;
+  overflow: auto;
+  padding: 20px;
+  box-sizing: border-box;
+  border-radius: var(--dsw-radius-md, 10px);
+  background: var(--dsw-alias-bg-overlay, #fff);
+  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.35);
+}
+.mmd-zoom-canvas > svg { display: block; max-width: none; height: auto; }
+.mmd-zoom-toolbar {
+  position: absolute;
+  left: 50%;
+  bottom: 24px;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 10px;
+  border-radius: 10px;
+  background: var(--dsw-alias-bg-overlay, #222);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.35);
+}
+.mmd-zoom-toolbar button {
+  min-width: 28px;
+  height: 28px;
+  padding: 0 8px;
+  border: none;
+  border-radius: 6px;
+  background: transparent;
+  color: var(--dsw-alias-label-primary, inherit);
+  font: inherit;
+  cursor: pointer;
+}
+.mmd-zoom-toolbar button:hover:not(:disabled) { background: var(--dsw-alias-border-l2, rgba(127, 127, 127, 0.2)); }
+.mmd-zoom-toolbar button:disabled { opacity: 0.4; cursor: default; }
+.mmd-zoom-readout {
+  min-width: 46px;
+  text-align: center;
+  font-variant-numeric: tabular-nums;
+  color: var(--dsw-alias-label-primary, inherit);
+}
 `;
 function installStyles() {
   if (typeof document === "undefined") return () => {
