@@ -1,6 +1,7 @@
 {
   "name": "dsh-plugin-mermaid-markdown",
   "version": "1.0.0",
+  "license": "MIT",
   "private": true,
   "type": "module",
   "exports": {
@@ -9,7 +10,7 @@
     "./locale/*.json": "./locale/*.json",
     "./icon": "./icon.svg"
   },
-  "files": ["index.js", "client.js", "cordis.patch.yml", "locale/*.json", "docs", "README.md", "icon.svg"],
+  "files": ["index.js", "client.js", "cordis.patch.yml", "locale/*.json", "docs", "README.md", "LICENSE", "icon.svg"],
   "scripts": {
     "build": "node build.mjs",
     "test": "node --test"

@@ -19,28 +19,33 @@
 
 ## 如何安装到 DSH
 
-### GUI 添加本地目录（推荐）
+### 方式一：从 GitHub 克隆（推荐）
 
-1. 先在插件目录构建一次（见下）。
-2. 侧栏「插件」→「添加插件（Add plugin）」→ 输入本地目录路径，例如 `C:\Users\sanga\Desktop\hw\mermaid`。
-3. 启用后刷新页面。
-
-### 已安装时更新
-
-改完代码后：
+仓库里已包含构建好的 `client.js`，克隆后**无需再构建**：
 
 ```bash
-cd mermaid
-node build.mjs   # 重新产出 client.js
+git clone https://github.com/sangaizhi/dsh-plugin-mermaid-markdown.git
 ```
 
-刷新页面即可（`client.js` 会被重新加载）。
+然后在 DSH 侧栏「插件」→「添加插件（Add plugin）」→ 输入克隆下来的目录路径（例如 `.../dsh-plugin-mermaid-markdown`），启用后刷新页面。
 
-### 构建
+### 方式二：本地已有源码
+
+进入插件目录构建一次，再安装：
 
 ```bash
-cd mermaid
+cd mermaid          # 或你的插件目录
 pnpm install
+node build.mjs      # 产出 client.js
+```
+
+然后在「插件」→「添加插件」里输入该目录路径，启用后刷新页面。
+
+### 更新已安装的插件
+
+改了代码后重新构建，再刷新页面（`client.js` 会被重新加载）：
+
+```bash
 node build.mjs
 ```
 
