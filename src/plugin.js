@@ -1,4 +1,5 @@
 import { MermaidMarkdownDocument } from './document.jsx'
+import { setColorScheme } from './theme.js'
 
 const NS = 'mermaidMarkdown'
 const DOCUMENT_ID = '@local/mermaid-markdown/document'
@@ -11,6 +12,14 @@ export function apply(ctx) {
     en: { 'viewer.label': 'Mermaid Markdown' },
     zh: { 'viewer.label': 'Mermaid 图表' },
   }), 'mermaid-markdown: locale')
+
+  const theme = ctx.get('theme')
+  if (theme) {
+    setColorScheme(theme.getTheme().active.colorScheme)
+    ctx.effect(() => ctx.on('theme/change', (snapshot) => {
+      setColorScheme(snapshot.active.colorScheme)
+    }), 'mermaid-markdown: theme sync')
+  }
 
   const previews = ctx.documentPreviews
   if (previews) {

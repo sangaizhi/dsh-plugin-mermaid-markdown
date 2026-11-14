@@ -194250,6 +194250,11 @@ function subscribeColorScheme(listener) {
     listeners.delete(listener);
   };
 }
+function setColorScheme(value2) {
+  if (value2 === colorScheme) return;
+  colorScheme = value2;
+  for (const listener of listeners) listener();
+}
 
 // src/MermaidDiagram.jsx
 var import_jsx_runtime = require("react/jsx-runtime");
@@ -194312,6 +194317,13 @@ function apply6(ctx) {
     en: { "viewer.label": "Mermaid Markdown" },
     zh: { "viewer.label": "Mermaid \u56FE\u8868" }
   }), "mermaid-markdown: locale");
+  const theme = ctx.get("theme");
+  if (theme) {
+    setColorScheme(theme.getTheme().active.colorScheme);
+    ctx.effect(() => ctx.on("theme/change", (snapshot) => {
+      setColorScheme(snapshot.active.colorScheme);
+    }), "mermaid-markdown: theme sync");
+  }
   const previews = ctx.documentPreviews;
   if (previews) {
     ctx.effect(() => previews.register({
