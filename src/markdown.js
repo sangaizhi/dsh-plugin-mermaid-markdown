@@ -1,6 +1,8 @@
 import MarkdownIt from 'markdown-it'
 
-const md = new MarkdownIt({ html: true })
+// Parse only: the host's MarkdownText renders the chunks, so markdown-it here
+// just locates mermaid fences.
+const md = new MarkdownIt()
 
 /**
  * Split a leading YAML frontmatter block (`---` ... `---`/`...`) from the body.
@@ -41,7 +43,7 @@ function computeLineOffsets(body) {
  * as source while streaming.
  */
 export function splitMarkdownSegments(body) {
-  const tokens = md.parse(body, {})
+  const tokens = md.parse(body)
   const lineOffsets = computeLineOffsets(body)
   const segments = []
   let cursor = 0

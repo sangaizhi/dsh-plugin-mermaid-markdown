@@ -8,9 +8,6 @@ importers:
 
   .:
     devDependencies:
-      dompurify:
-        specifier: ^3.2.4
-        version: 3.4.17
       esbuild:
         specifier: ^0.24.0
         version: 0.24.2

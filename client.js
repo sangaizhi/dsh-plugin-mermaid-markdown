@@ -186904,13 +186904,13 @@ var init_pegDiagram_XKGWAZYB = __esm({
   }
 });
 
-// src/entry.js
-var entry_exports = {};
-__export(entry_exports, {
+// src/plugin.js
+var plugin_exports = {};
+__export(plugin_exports, {
   apply: () => apply6,
   inject: () => inject2
 });
-module.exports = __toCommonJS(entry_exports);
+module.exports = __toCommonJS(plugin_exports);
 
 // src/document.jsx
 var import_react3 = require("react");
@@ -192311,7 +192311,7 @@ MarkdownIt.prototype.renderInline = function(src, env) {
 var lib_default = MarkdownIt;
 
 // src/markdown.js
-var md = new lib_default({ html: true });
+var md = new lib_default();
 function splitFrontmatter(text6) {
   const lines = text6.split("\n");
   if (lines[0]?.trim() !== "---") return { body: text6, frontmatter: null };
@@ -192335,7 +192335,7 @@ function computeLineOffsets(body) {
   return offsets;
 }
 function splitMarkdownSegments(body) {
-  const tokens2 = md.parse(body, {});
+  const tokens2 = md.parse(body);
   const lineOffsets = computeLineOffsets(body);
   const segments = [];
   let cursor = 0;

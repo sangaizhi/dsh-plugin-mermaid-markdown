@@ -20,7 +20,7 @@ const exe = [
 if (!exe) throw new Error('esbuild native binary not found')
 
 const args = [
-  'src/entry.js',
+  'src/plugin.js',
   '--bundle',
   '--format=cjs',
   '--platform=node',
