@@ -194260,11 +194260,15 @@ function setColorScheme(value2) {
 var import_react = require("react");
 var import_react_dom = require("react-dom");
 var import_jsx_runtime = require("react/jsx-runtime");
-var MIN_ZOOM = 0.5;
-var MAX_ZOOM = 3;
-var STEP = 0.25;
-function clampZoom(value2) {
-  return Math.min(MAX_ZOOM, Math.max(MIN_ZOOM, Number(value2.toFixed(2))));
+var MIN_ZOOM = 0.25;
+var MAX_ZOOM = 8;
+var ZOOM_STEPS = [0.25, 0.5, 0.75, 1, 1.5, 2, 3, 4, 6, 8];
+function zoomInFrom(current) {
+  return ZOOM_STEPS.find((step4) => step4 > current + 1e-6) ?? MAX_ZOOM;
+}
+function zoomOutFrom(current) {
+  const below = ZOOM_STEPS.filter((step4) => step4 < current - 1e-6);
+  return below.length === 0 ? MIN_ZOOM : below[below.length - 1];
 }
 function MermaidZoomOverlay({ svg: svg3, onClose }) {
   const [zoom3, setZoom] = (0, import_react.useState)(1);
@@ -194275,8 +194279,8 @@ function MermaidZoomOverlay({ svg: svg3, onClose }) {
         onClose();
         return;
       }
-      if (event3.key === "+" || event3.key === "=") setZoom((z2) => clampZoom(z2 + STEP));
-      else if (event3.key === "-" || event3.key === "_") setZoom((z2) => clampZoom(z2 - STEP));
+      if (event3.key === "+" || event3.key === "=") setZoom((z2) => zoomInFrom(z2));
+      else if (event3.key === "-" || event3.key === "_") setZoom((z2) => zoomOutFrom(z2));
       else if (event3.key === "0") setZoom(1);
     };
     window.addEventListener("keydown", onKey);
@@ -194299,12 +194303,12 @@ function MermaidZoomOverlay({ svg: svg3, onClose }) {
         children: [
           /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "mmd-zoom-stage", role: "dialog", "aria-modal": "true", "aria-label": "Mermaid diagram preview", children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "mmd-zoom-canvas", style: { zoom: zoom3 }, dangerouslySetInnerHTML: { __html: svg3 } }) }),
           /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { className: "mmd-zoom-toolbar", children: [
-            /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", { type: "button", onClick: () => setZoom((z2) => clampZoom(z2 - STEP)), disabled: zoom3 <= MIN_ZOOM, "aria-label": "Zoom out", children: "\u2212" }),
+            /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", { type: "button", onClick: () => setZoom((z2) => zoomOutFrom(z2)), disabled: zoom3 <= MIN_ZOOM, "aria-label": "Zoom out", children: "\u2212" }),
             /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", { className: "mmd-zoom-readout", "aria-live": "polite", children: [
               Math.round(zoom3 * 100),
               "%"
             ] }),
-            /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", { type: "button", onClick: () => setZoom((z2) => clampZoom(z2 + STEP)), disabled: zoom3 >= MAX_ZOOM, "aria-label": "Zoom in", children: "+" }),
+            /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", { type: "button", onClick: () => setZoom((z2) => zoomInFrom(z2)), disabled: zoom3 >= MAX_ZOOM, "aria-label": "Zoom in", children: "+" }),
             /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", { type: "button", onClick: () => setZoom(1), disabled: zoom3 === 1, children: "\u91CD\u7F6E" }),
             /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", { ref: closeRef, type: "button", onClick: onClose, "aria-label": "Close preview", children: "\u2715" })
           ] })

@@ -1,13 +1,19 @@
 import { useEffect, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
 
-const MIN_ZOOM = 0.5
-const MAX_ZOOM = 3
-const STEP = 0.25
+const MIN_ZOOM = 0.25
+const MAX_ZOOM = 8
+const ZOOM_STEPS = [0.25, 0.5, 0.75, 1, 1.5, 2, 3, 4, 6, 8]
 
-/** Clamp a zoom value into the supported range and kill float noise. */
-function clampZoom(value) {
-  return Math.min(MAX_ZOOM, Math.max(MIN_ZOOM, Number(value.toFixed(2))))
+/** Next rung above the current zoom, or the maximum when already there. */
+function zoomInFrom(current) {
+  return ZOOM_STEPS.find((step) => step > current + 1e-6) ?? MAX_ZOOM
+}
+
+/** Next rung below the current zoom, or the minimum when already there. */
+function zoomOutFrom(current) {
+  const below = ZOOM_STEPS.filter((step) => step < current - 1e-6)
+  return below.length === 0 ? MIN_ZOOM : below[below.length - 1]
 }
 
 /**
@@ -22,8 +28,8 @@ export function MermaidZoomOverlay({ svg, onClose }) {
   useEffect(() => {
     const onKey = (event) => {
       if (event.key === 'Escape') { onClose(); return }
-      if (event.key === '+' || event.key === '=') setZoom((z) => clampZoom(z + STEP))
-      else if (event.key === '-' || event.key === '_') setZoom((z) => clampZoom(z - STEP))
+      if (event.key === '+' || event.key === '=') setZoom((z) => zoomInFrom(z))
+      else if (event.key === '-' || event.key === '_') setZoom((z) => zoomOutFrom(z))
       else if (event.key === '0') setZoom(1)
     }
     window.addEventListener('keydown', onKey)
@@ -45,9 +51,9 @@ export function MermaidZoomOverlay({ svg, onClose }) {
         <div className="mmd-zoom-canvas" style={{ zoom }} dangerouslySetInnerHTML={{ __html: svg }} />
       </div>
       <div className="mmd-zoom-toolbar">
-        <button type="button" onClick={() => setZoom((z) => clampZoom(z - STEP))} disabled={zoom <= MIN_ZOOM} aria-label="Zoom out">−</button>
+        <button type="button" onClick={() => setZoom((z) => zoomOutFrom(z))} disabled={zoom <= MIN_ZOOM} aria-label="Zoom out">−</button>
         <span className="mmd-zoom-readout" aria-live="polite">{Math.round(zoom * 100)}%</span>
-        <button type="button" onClick={() => setZoom((z) => clampZoom(z + STEP))} disabled={zoom >= MAX_ZOOM} aria-label="Zoom in">+</button>
+        <button type="button" onClick={() => setZoom((z) => zoomInFrom(z))} disabled={zoom >= MAX_ZOOM} aria-label="Zoom in">+</button>
         <button type="button" onClick={() => setZoom(1)} disabled={zoom === 1}>重置</button>
         <button ref={closeRef} type="button" onClick={onClose} aria-label="Close preview">✕</button>
       </div>
