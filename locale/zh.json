@@ -1,6 +1,6 @@
 {
   "meta": {
     "title": "Markdown Mermaid 渲染",
-    "description": "在工作区文件预览中，把 Markdown 文件里的 ```mermaid 代码块实时渲染成图表。"
+    "description": "在工作区文件预览中，把 Markdown 文件里的 ```mermaid 代码块实时渲染成图表。暂不解析 Markdown 中的相对图片路径。"
   }
 }

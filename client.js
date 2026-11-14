@@ -194307,39 +194307,41 @@ function MermaidMarkdownDocument({ content }) {
   ] });
 }
 
-// src/plugin.js
+// src/definition.js
 var NS = "mermaidMarkdown";
 var DOCUMENT_ID = "@local/mermaid-markdown/document";
-var inject2 = ["slots", "locale"];
+var inject2 = ["slots", "locale", "documentPreviews", "theme"];
+function markdownDefinition(title2) {
+  return {
+    id: DOCUMENT_ID,
+    extensions: ["md", "markdown"],
+    priority: "extension",
+    title: title2,
+    loading: "text-pages",
+    wrap: false
+  };
+}
+
+// src/plugin.js
 function apply6(ctx) {
   const t = ctx.locale.bind(NS);
   ctx.effect(() => ctx.locale.register(NS, {
     en: { "viewer.label": "Mermaid Markdown" },
     zh: { "viewer.label": "Mermaid \u56FE\u8868" }
   }), "mermaid-markdown: locale");
-  const theme = ctx.get("theme");
-  if (theme) {
-    setColorScheme(theme.getTheme().active.colorScheme);
-    ctx.effect(() => ctx.on("theme/change", (snapshot) => {
-      setColorScheme(snapshot.active.colorScheme);
-    }), "mermaid-markdown: theme sync");
-  }
-  const previews = ctx.documentPreviews;
-  if (previews) {
-    ctx.effect(() => previews.register({
-      id: DOCUMENT_ID,
-      extensions: ["md", "markdown"],
-      priority: "extension",
-      title: () => t("viewer.label"),
-      loading: "text-pages",
-      wrap: false
-    }), "mermaid-markdown: document metadata");
-    ctx.effect(() => ctx.slots.inject("sidebar.right.tab.document", () => ctx.slots.register({
-      name: "sidebar.right.tab.document",
-      key: DOCUMENT_ID,
-      locale: NS
-    }, MermaidMarkdownDocument)), "mermaid-markdown: document body");
-  }
+  setColorScheme(ctx.theme.getTheme().active.colorScheme);
+  ctx.effect(() => ctx.on("theme/change", (snapshot) => {
+    setColorScheme(snapshot.active.colorScheme);
+  }), "mermaid-markdown: theme sync");
+  ctx.effect(
+    () => ctx.documentPreviews.register(markdownDefinition(() => t("viewer.label"))),
+    "mermaid-markdown: document metadata"
+  );
+  ctx.effect(() => ctx.slots.inject("sidebar.right.tab.document", () => ctx.slots.register({
+    name: "sidebar.right.tab.document",
+    key: DOCUMENT_ID,
+    locale: NS
+  }, MermaidMarkdownDocument)), "mermaid-markdown: document body");
 }
 // Annotate the CommonJS export names for ESM import in node:
 0 && (module.exports = {
