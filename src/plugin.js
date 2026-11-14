@@ -1,10 +1,13 @@
 import { MermaidMarkdownDocument } from './document.jsx'
 import { setColorScheme } from './theme.js'
+import { installStyles } from './styles.js'
 import { NS, DOCUMENT_ID, inject, markdownDefinition } from './definition.js'
 
 export { inject }
 
 export function apply(ctx) {
+  ctx.effect(installStyles, 'mermaid-markdown: styles')
+
   const t = ctx.locale.bind(NS)
   ctx.effect(() => ctx.locale.register(NS, {
     en: { 'viewer.label': 'Mermaid Markdown' },

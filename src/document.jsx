@@ -16,8 +16,8 @@ export function MermaidMarkdownDocument({ content }) {
   if (!content || content.kind !== 'text') return null
 
   return (
-    <div data-document-markdown>
-      {split.frontmatter != null ? <pre data-document-frontmatter>{split.frontmatter}</pre> : null}
+    <div className="mmd-document" data-document-markdown>
+      {split.frontmatter != null ? <pre className="mmd-frontmatter" data-document-frontmatter>{split.frontmatter}</pre> : null}
       {segments.map((seg, i) => seg.kind === 'mermaid'
         ? <MermaidDiagram key={`m${i}`} code={seg.code} />
         : <div key={`h${i}`} dangerouslySetInnerHTML={{ __html: sanitize(seg.html) }} />)}

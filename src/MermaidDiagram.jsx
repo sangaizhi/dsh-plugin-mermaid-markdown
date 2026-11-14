@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState, useSyncExternalStore } from 'react'
+import { useEffect, useState, useSyncExternalStore } from 'react'
 import { initMermaid, renderMermaid } from './mermaid.js'
 import { getColorScheme, subscribeColorScheme } from './theme.js'
 
@@ -9,7 +9,7 @@ export function MermaidDiagram({ code }) {
   const colorScheme = useSyncExternalStore(subscribeColorScheme, getColorScheme)
   const [svg, setSvg] = useState('')
   const [error, setError] = useState('')
-  const idRef = useRef(`mmd-${++idCounter}`)
+  const [id] = useState(() => `mmd-${++idCounter}`)
 
   useEffect(() => {
     let alive = true
@@ -17,21 +17,21 @@ export function MermaidDiagram({ code }) {
     setError('')
     const timer = setTimeout(() => {
       initMermaid(colorScheme)
-      renderMermaid(idRef.current, code)
+      renderMermaid(id, code)
         .then((s) => { if (alive) setSvg(s) })
         .catch((e) => { if (alive) setError(String((e && e.message) || e)) })
     }, 50)
     return () => { alive = false; clearTimeout(timer) }
-  }, [code, colorScheme])
+  }, [id, code, colorScheme])
 
   if (error) {
     return (
-      <div>
+      <div className="mmd-diagram">
         <pre>{code}</pre>
-        <div role="alert" style={{ color: 'var(--dsw-alias-danger, #d14)' }}>{error}</div>
+        <div className="mmd-error" role="alert">{error}</div>
       </div>
     )
   }
-  if (!svg) return <div aria-label="rendering">rendering…</div>
-  return <div className="mmd-svg" dangerouslySetInnerHTML={{ __html: svg }} />
+  if (!svg) return <div className="mmd-diagram" aria-label="rendering">rendering…</div>
+  return <div className="mmd-diagram" dangerouslySetInnerHTML={{ __html: svg }} />
 }
