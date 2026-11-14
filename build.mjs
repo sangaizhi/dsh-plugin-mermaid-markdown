@@ -27,6 +27,7 @@ const args = [
   '--target=es2020',
   '--external:react',
   '--external:react/jsx-runtime',
+  '--external:@deepseek-ai/dsh-client-ui-primitives',
   '--jsx=automatic',
   '--outfile=client.js',
   `--banner:js=window.__ModuleLoader__.load({id:${JSON.stringify(id)},factory:function(require){var module={exports:{}};var exports=module.exports;`,

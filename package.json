@@ -19,7 +19,8 @@
     "client": {
       "platform": "web",
       "immediately": true,
-      "inject": ["@deepseek-ai/dsh-client-ui-sidebar-documentpreview"]
+      "inject": ["@deepseek-ai/dsh-client-ui-sidebar-documentpreview"],
+      "external": ["@deepseek-ai/dsh-client-ui-primitives"]
     }
   },
   "devDependencies": {

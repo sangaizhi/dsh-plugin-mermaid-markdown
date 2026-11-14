@@ -27,11 +27,11 @@ test('splitMarkdownSegments splits one mermaid fence from surrounding markdown',
   const segs = splitMarkdownSegments('# T\n\n```mermaid\ngraph TD; A-->B\n```\n\n- item')
   assert.equal(segs.length, 3)
   assert.equal(segs[0].kind, 'markdown')
-  assert.match(segs[0].html, /<h1>T<\/h1>/)
+  assert.match(segs[0].markdown, /# T/)
   assert.equal(segs[1].kind, 'mermaid')
   assert.equal(segs[1].code, 'graph TD; A-->B')
   assert.equal(segs[2].kind, 'markdown')
-  assert.match(segs[2].html, /<li>item<\/li>/)
+  assert.match(segs[2].markdown, /- item/)
 })
 
 test('splitMarkdownSegments handles multiple mermaid blocks in order', () => {
@@ -52,7 +52,7 @@ test('splitMarkdownSegments treats an unclosed mermaid fence as markdown source'
   assert.equal(segs.filter((s) => s.kind === 'mermaid').length, 0)
   assert.equal(segs.length, 1)
   assert.equal(segs[0].kind, 'markdown')
-  assert.match(segs[0].html, /language-mermaid/) // source is shown as a mermaid code block
+  assert.match(segs[0].markdown, /graph TD; A-->B/)
 })
 
 test('splitMarkdownSegments ignores non-mermaid fences', () => {

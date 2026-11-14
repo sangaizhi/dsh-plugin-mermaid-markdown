@@ -34,9 +34,11 @@ function computeLineOffsets(body) {
 }
 
 /**
- * Split a Markdown body into ordered segments: rendered Markdown HTML chunks
- * and mermaid diagram code. Only CLOSED mermaid fences become diagrams; an
- * unclosed fence (still streaming) stays Markdown so it renders as source.
+ * Split a Markdown body into ordered segments: raw Markdown chunks and mermaid
+ * diagram code. The chunks are handed back verbatim so the host's own
+ * `MarkdownText` renders them (keeping the builtin typography); only closed
+ * mermaid fences are pulled out. An unclosed fence stays Markdown so it renders
+ * as source while streaming.
  */
 export function splitMarkdownSegments(body) {
   const tokens = md.parse(body, {})
@@ -48,19 +50,19 @@ export function splitMarkdownSegments(body) {
       const start = lineOffsets[token.map[0]] ?? 0
       const end = lineOffsets[token.map[1]] ?? body.length
       if (start > cursor) {
-        const html = md.render(body.slice(cursor, start))
-        if (html.trim()) segments.push({ kind: 'markdown', html })
+        const markdown = body.slice(cursor, start)
+        if (markdown.trim()) segments.push({ kind: 'markdown', markdown })
       }
       segments.push({ kind: 'mermaid', code: token.content.replace(/\n$/, '') })
       cursor = end
     }
   }
   if (cursor < body.length) {
-    const html = md.render(body.slice(cursor))
-    if (html.trim()) segments.push({ kind: 'markdown', html })
+    const markdown = body.slice(cursor)
+    if (markdown.trim()) segments.push({ kind: 'markdown', markdown })
   }
   if (segments.length === 0 && body.trim()) {
-    segments.push({ kind: 'markdown', html: md.render(body) })
+    segments.push({ kind: 'markdown', markdown: body })
   }
   return segments
 }
