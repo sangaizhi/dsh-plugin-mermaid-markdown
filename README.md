@@ -19,9 +19,19 @@
 
 ## 如何安装到 DSH
 
-### 方式一：从 GitHub 克隆（推荐）
+### 方式一：命令行直接安装（推荐）
 
-仓库里已包含构建好的 `client.js`，克隆后**无需再构建**：
+仓库已包含构建好的 `client.js`，无需再构建：
+
+```bash
+dsh plugin add github:sangaizhi/dsh-plugin-mermaid-markdown
+# 或指定 profile
+dsh plugin --profile web add github:sangaizhi/dsh-plugin-mermaid-markdown
+```
+
+需要可复现的话，钉住提交：`github:sangaizhi/dsh-plugin-mermaid-markdown#c8e4a9a`。装完启用插件、刷新页面。
+
+### 方式二：GUI 添加本地目录（先 clone）
 
 ```bash
 git clone https://github.com/sangaizhi/dsh-plugin-mermaid-markdown.git
@@ -29,12 +39,11 @@ git clone https://github.com/sangaizhi/dsh-plugin-mermaid-markdown.git
 
 然后在 DSH 侧栏「插件」→「添加插件（Add plugin）」→ 输入克隆下来的目录路径（例如 `.../dsh-plugin-mermaid-markdown`），启用后刷新页面。
 
-### 方式二：本地已有源码
+### 方式三：本地已有源码（开发）
 
 进入插件目录构建一次，再安装：
 
 ```bash
-cd mermaid          # 或你的插件目录
 pnpm install
 node build.mjs      # 产出 client.js
 ```
