@@ -11,7 +11,7 @@
 import { spawnSync } from 'node:child_process'
 import { existsSync, globSync } from 'node:fs'
 
-const id = '@local/mermaid-markdown'
+const id = 'dsh-plugin-mermaid-markdown'
 
 const exe = [
   'node_modules/@esbuild/win32-x64/esbuild.exe',

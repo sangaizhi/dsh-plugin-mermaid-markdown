@@ -1,5 +1,5 @@
 {
-  "name": "@local/mermaid-markdown",
+  "name": "dsh-plugin-mermaid-markdown",
   "version": "1.0.0",
   "private": true,
   "type": "module",

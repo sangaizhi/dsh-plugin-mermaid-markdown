@@ -1,6 +1,6 @@
 /** Shared registration constants and the document-preview definition, kept pure for testability. */
 export const NS = 'mermaidMarkdown'
-export const DOCUMENT_ID = '@local/mermaid-markdown/document'
+export const DOCUMENT_ID = 'dsh-plugin-mermaid-markdown/document'
 
 /** Hard client-service dependencies; `documentPreviews` must be here or `ctx.documentPreviews` throws. */
 export const inject = ['slots', 'locale', 'documentPreviews', 'theme']

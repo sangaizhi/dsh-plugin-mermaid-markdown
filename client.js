@@ -1,4 +1,4 @@
-window.__ModuleLoader__.load({id:"@local/mermaid-markdown",factory:function(require){var module={exports:{}};var exports=module.exports;
+window.__ModuleLoader__.load({id:"dsh-plugin-mermaid-markdown",factory:function(require){var module={exports:{}};var exports=module.exports;
 var __create = Object.create;
 var __defProp = Object.defineProperty;
 var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
@@ -194399,7 +194399,7 @@ function MermaidMarkdownDocument({ content }) {
 }
 
 // src/styles.js
-var PLUGIN_ID = "@local/mermaid-markdown";
+var PLUGIN_ID = "dsh-plugin-mermaid-markdown";
 var CSS2 = `
 .mmd-document {
   min-width: 0;
@@ -194497,7 +194497,7 @@ function installStyles() {
 
 // src/definition.js
 var NS = "mermaidMarkdown";
-var DOCUMENT_ID = "@local/mermaid-markdown/document";
+var DOCUMENT_ID = "dsh-plugin-mermaid-markdown/document";
 var inject2 = ["slots", "locale", "documentPreviews", "theme"];
 function markdownDefinition(title2) {
   return {
@@ -194515,7 +194515,7 @@ function apply6(ctx) {
   ctx.effect(installStyles, "mermaid-markdown: styles");
   const t = ctx.locale.bind(NS);
   ctx.effect(() => ctx.locale.register(NS, {
-    en: { "viewer.label": "Mermaid Markdown" },
+    en: { "viewer.label": "Mermaid" },
     zh: { "viewer.label": "Mermaid \u56FE\u8868" }
   }), "mermaid-markdown: locale");
   setColorScheme(ctx.theme.getTheme().active.colorScheme);

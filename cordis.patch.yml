@@ -1,3 +1,3 @@
 - insert:
     - id: mermaid-markdown
-      name: '@local/mermaid-markdown'
+      name: dsh-plugin-mermaid-markdown

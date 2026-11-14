@@ -10,7 +10,7 @@ export function apply(ctx) {
 
   const t = ctx.locale.bind(NS)
   ctx.effect(() => ctx.locale.register(NS, {
-    en: { 'viewer.label': 'Mermaid Markdown' },
+    en: { 'viewer.label': 'Mermaid' },
     zh: { 'viewer.label': 'Mermaid 图表' },
   }), 'mermaid-markdown: locale')
 

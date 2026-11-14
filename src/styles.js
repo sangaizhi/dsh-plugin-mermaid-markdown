@@ -6,7 +6,7 @@
  * mermaid diagram spacing, and the click-to-enlarge preview.
  */
 
-const PLUGIN_ID = '@local/mermaid-markdown'
+const PLUGIN_ID = 'dsh-plugin-mermaid-markdown'
 
 const CSS = `
 .mmd-document {

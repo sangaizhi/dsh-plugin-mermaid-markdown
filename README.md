@@ -1,4 +1,4 @@
-# Mermaid Markdown（DSH 插件）
+# Mermaid in Markdown（DSH 插件）
 
 在 DSH 工作区里打开 Markdown 文件时，把其中的 ` ```mermaid ` 代码块实时渲染成图表；点击图表可放大预览。
 

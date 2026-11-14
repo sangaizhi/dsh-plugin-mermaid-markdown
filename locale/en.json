@@ -1,6 +1,6 @@
 {
   "meta": {
     "title": "Mermaid in Markdown",
-    "description": "Renders ```mermaid code blocks inside Markdown files as diagrams in the workspace file preview. Relative image paths in the Markdown are not resolved."
+    "description": "Renders ```mermaid code blocks inside Markdown files as diagrams in the workspace file preview, with click-to-enlarge zoom. Relative image paths in the Markdown are not resolved."
   }
 }
