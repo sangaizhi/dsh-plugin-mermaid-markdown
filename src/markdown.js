@@ -43,7 +43,10 @@ function computeLineOffsets(body) {
  * as source while streaming.
  */
 export function splitMarkdownSegments(body) {
-  const tokens = md.parse(body)
+  // Pass an env object: markdown-it accesses state.env.references for shortcut
+  // reference brackets (e.g. "[label]" or task-list "[ ]"), and an undefined
+  // env throws "Cannot read properties of undefined (reading 'references')".
+  const tokens = md.parse(body, {})
   const lineOffsets = computeLineOffsets(body)
   const segments = []
   let cursor = 0

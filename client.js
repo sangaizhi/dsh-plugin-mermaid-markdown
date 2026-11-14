@@ -192335,7 +192335,7 @@ function computeLineOffsets(body) {
   return offsets;
 }
 function splitMarkdownSegments(body) {
-  const tokens2 = md.parse(body);
+  const tokens2 = md.parse(body, {});
   const lineOffsets = computeLineOffsets(body);
   const segments = [];
   let cursor = 0;
@@ -194515,8 +194515,8 @@ function apply6(ctx) {
   ctx.effect(installStyles, "mermaid-markdown: styles");
   const t = ctx.locale.bind(NS);
   ctx.effect(() => ctx.locale.register(NS, {
-    en: { "viewer.label": "Mermaid" },
-    zh: { "viewer.label": "Mermaid \u56FE\u8868" }
+    en: { "viewer.label": "Markdown-Mermaid" },
+    zh: { "viewer.label": "Markdown-Mermaid" }
   }), "mermaid-markdown: locale");
   setColorScheme(ctx.theme.getTheme().active.colorScheme);
   ctx.effect(() => ctx.on("theme/change", (snapshot) => {

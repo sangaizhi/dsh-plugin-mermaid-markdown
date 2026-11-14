@@ -10,8 +10,8 @@ export function apply(ctx) {
 
   const t = ctx.locale.bind(NS)
   ctx.effect(() => ctx.locale.register(NS, {
-    en: { 'viewer.label': 'Mermaid' },
-    zh: { 'viewer.label': 'Mermaid 图表' },
+    en: { 'viewer.label': 'Markdown-Mermaid' },
+    zh: { 'viewer.label': 'Markdown-Mermaid' },
   }), 'mermaid-markdown: locale')
 
   setColorScheme(ctx.theme.getTheme().active.colorScheme)

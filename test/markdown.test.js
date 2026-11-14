@@ -62,3 +62,14 @@ test('splitMarkdownSegments ignores non-mermaid fences', () => {
   assert.equal(segs.length, 1)
   assert.equal(segs[0].kind, 'markdown')
 })
+
+test('splitMarkdownSegments tolerates shortcut reference brackets and task checkboxes', () => {
+  // Regression: markdown-it throws "Cannot read properties of undefined
+  // (reading 'references')" when md.parse runs without an env object and the
+  // source contains shortcut references ("[label]") or "- [ ]" task items.
+  const src = '- [未拍板项被当成事实] → 用 [ASSUMPTION-01]\n\n- [ ] 1.1 任务'
+  const segs = splitMarkdownSegments(src)
+  assert.equal(segs.length, 1)
+  assert.equal(segs[0].kind, 'markdown')
+  assert.match(segs[0].markdown, /ASSUMPTION-01/)
+})
