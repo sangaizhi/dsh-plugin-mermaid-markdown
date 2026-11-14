@@ -1,0 +1,31 @@
+{
+  "name": "@local/mermaid-markdown",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./index.js",
+    "./client": "./client.js",
+    "./locale/*.json": "./locale/*.json",
+    "./icon": "./icon.svg"
+  },
+  "files": ["index.js", "client.js", "cordis.patch.yml", "locale/*.json", "docs", "icon.svg"],
+  "scripts": {
+    "build": "node build.mjs",
+    "test": "node --test test/"
+  },
+  "dsh": {
+    "bundle": { "patch": "./cordis.patch.yml" },
+    "client": {
+      "platform": "web",
+      "immediately": true,
+      "inject": ["@deepseek-ai/dsh-client-ui-sidebar-documentpreview", "@deepseek-ai/dsh-client-ui-chat"]
+    }
+  },
+  "devDependencies": {
+    "dompurify": "^3.2.4",
+    "esbuild": "^0.24.0",
+    "markdown-it": "^14.1.0",
+    "mermaid": "^11.4.1"
+  }
+}
